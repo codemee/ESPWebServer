@@ -4,7 +4,7 @@ This is a very lightweight web server for MicroPython on ESP8266/32.It only acce
 
 ## Installation
 
-Just upload ESPWebServer.py to your ESP8266 board and you're done.
+Just upload ESPWebServer.py to your ESP8266/32 board and you're done.
 
 ## Usage
 
