@@ -1,4 +1,4 @@
-import ESP8266WebServer
+import ESPWebServer
 import network
 import machine
 
@@ -44,7 +44,7 @@ def updateInfo(socket):
     ledData["color"] = "red" if pin.value() else "green"
     ledData["status"] = "Off" if pin.value() else "On"
     ledData["switch"] = "on" if pin.value() else "off"
-    ESP8266WebServer.ok(
+    ESPWebServer.ok(
         socket, 
         "200",
         ledData["status"])
@@ -58,7 +58,7 @@ def handleCmd(socket, args):
             pin.on()
         updateInfo(socket)
     else:
-        ESP8266WebServer.err(socket, "400", "Bad Request")
+        ESPWebServer.err(socket, "400", "Bad Request")
 
 # handler for path "/switch" 
 def handleSwitch(socket, args):
@@ -66,23 +66,23 @@ def handleSwitch(socket, args):
     updateInfo(socket)
     
 # Start the server @ port 8899
-# ESP8266WebServer.begin(8899)
-ESP8266WebServer.begin() # use default 80 port
+# ESPWebServer.begin(8899)
+ESPWebServer.begin() # use default 80 port
 
 # Register handler for each path
-# ESP8266WebServer.onPath("/", handleRoot)
-ESP8266WebServer.onPath("/cmd", handleCmd)
-ESP8266WebServer.onPath("/switch", handleSwitch)
+# ESPWebServer.onPath("/", handleRoot)
+ESPWebServer.onPath("/cmd", handleCmd)
+ESPWebServer.onPath("/switch", handleSwitch)
 
 # Setting the path to documents
-ESP8266WebServer.setDocPath("/")
+ESPWebServer.setDocPath("/")
 
 # Setting data for template
-ESP8266WebServer.setTplData(ledData)
+ESPWebServer.setTplData(ledData)
 
 try:
     while True:
         # Let server process requests
-        ESP8266WebServer.handleClient()
+        ESPWebServer.handleClient()
 except:
-    ESP8266WebServer.close()
+    ESPWebServer.close()

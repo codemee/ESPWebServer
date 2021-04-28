@@ -1,4 +1,4 @@
-import ESP8266WebServer
+import ESPWebServer
 import network
 import machine
 
@@ -40,25 +40,25 @@ def handleCmd(socket, args):
         elif args['led'] == 'off':
             ledData["status"]="OFF"
             pin.on()
-        ESP8266WebServer.ok(socket, "200", args["led"])
+        ESPWebServer.ok(socket, "200", args["led"])
     else:
-        ESP8266WebServer.err(socket, "400", "Bad Request")
+        ESPWebServer.err(socket, "400", "Bad Request")
 
 # Start the server @ port 8899
-ESP8266WebServer.begin(8899)
+ESPWebServer.begin(8899)
 
 # Register handler for each path
-ESP8266WebServer.onPath("/cmd", handleCmd)
-ESP8266WebServer.setDocPath("/www2")
+ESPWebServer.onPath("/cmd", handleCmd)
+ESPWebServer.setDocPath("/www2")
 
 ledData = {
     "status":"Off",
 }
-ESP8266WebServer.setTplData(ledData)
+ESPWebServer.setTplData(ledData)
 
 try:
     while True:
         # Let server process requests
-        ESP8266WebServer.handleClient()
+        ESPWebServer.handleClient()
 except:
-    ESP8266WebServer.close()
+    ESPWebServer.close()
