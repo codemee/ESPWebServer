@@ -34,7 +34,7 @@ def handleStop(socket):
     running = False
     ESPWebServer.close()
 
-def handlePost(socket, args, method, contenttype, content):
+def handlePost(socket, args, contenttype, content):
     ESPWebServer.ok(
         socket,
         "200",
@@ -64,7 +64,7 @@ ESPWebServer.begin() # use default 80 port
 # ESPWebServer.onPath("/", handleRoot)
 ESPWebServer.onPath("/cmd", handleCmd)
 ESPWebServer.onPath("/switch", handleSwitch)
-ESPWebServer.onPath("/post", handlePost)
+ESPWebServer.onPostPath("/post", handlePost)
 
 # Setting the path to documents
 ESPWebServer.setDocPath("/")

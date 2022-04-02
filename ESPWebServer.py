@@ -14,8 +14,12 @@ server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 # Use for checking a new client connection
 poller = uselect.poll()
-# Dict for registed handlers of all paths
-handlers = {}
+# Dict for registed GET handlers of all paths
+getHandlers = {}
+# Dict for registed POST handlers of all paths
+postHandlers = {}
+# Dict for registed PUT handlers of all paths
+putHandlers = {}
 # Function of handler for request not found
 notFoundHandler = None
 # The path to the web documents on MicroPython filesystem
@@ -211,18 +215,42 @@ def handle(socket):
         err(socket, "505", "Version Not Supported")
     elif (method != "GET" and method != "PUT" and method != "POST"):  # Only accept GET,PUT and POST request
         err(socket, "501", "Not Implemented")
-    elif path in handlers: # Check for registered path
-        handlers[path](socket, args, method, contentType, content)
+    elif (path in postHandlers and method == "POST"): # Check for registered POST path
+        postHandlers[path](socket, args, contentType, content)
+    elif (path in putHandlers and method == "PUT"): # Check for registered PUT path
+        putHandlers[path](socket, args, contentType, content)
+    elif (path in getHandlers and method == "GET"): # Check for registered GET path
+        getHandlers[path](socket, args)
+    elif path in getHandlers: # here to ensure compatibility
+        getHandlers[path](socket, args)
     elif not path.startswith(docPath): # Check for wrong path
         err(socket, "400", "Bad Request")
     else: # find file in the document path
         __serveFile(socket, path)
 
 def onPath(path, handler):
-    """Register handler for processing request of specified path
+    """Register handler for processing GET request of specified path,
+    Here to ensure compatibility.
+    """
+    onGetPath(path, handler)
+
+def onGetPath(path, handler):
+    """Register handler for processing GET request of specified path
     """
     global handlers
-    handlers[path] = handler
+    getHandlers[path] = handler
+
+def onPostPath(path, handler):
+    """Register handler for processing POST of specified path
+    """
+    global handlers
+    postHandlers[path] = handler
+    
+def onPutPath(path, handler):
+    """Register handler for processing PUT of specified path
+    """
+    global handlers
+    putHandlers[path] = handler
     
 def onNotFound(handler):
     """Register handler for processing request of not found path

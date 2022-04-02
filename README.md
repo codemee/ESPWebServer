@@ -36,7 +36,25 @@ Start the server at specified *port*.
 
 ### onPath(path, handler)
 
-Register *handler* for processing request with matching *path* 
+Legacy method to ensure compatibility. Calls `onGetPath(path, handler)`.
+
+### onGetPath(path, handler)
+
+Registers a handler for handling GET Requests.
+
+The Handlers expected Method Signature: `methodName(socket, args)`
+
+### onPostPath(path, handler)
+
+Registers a handler for handling POST Requests.
+
+The Handlers expected Method Signature: `methodName(socket, args, contenttype, content)`
+
+### onPutPath(path, handler)
+
+Registers a handler for handling PUT Requests.
+
+The Handlers expected Method signature: `methodName(socket, args, contenttype, content)`
 
 ### setDocPath(path)
 
@@ -58,7 +76,7 @@ Check for new request and call corresponding handler to process it.
 
 You can upload www directory and index.p.html to "/" on ESP8266 board and run TestWebServer.py to see how it works.
 
-`main.py` contains an example for handling Request Body content. 
+`main.py` contains an example for handling POST Requests. PUT Requests are acting the same way.
 
 TestWebServer.py will show its own IP address through serial monitor.Just open your browser and connect it to http://serverIP:8899 or http://serverIP:8899/index.p.html, you'll get the main page that can turn on/off the buildin led on ESP8266 board. The main page also demonstrate the template file usage. 
 
