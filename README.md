@@ -1,6 +1,6 @@
 # ESPWebServer
 
-This is a very lightweight web server for MicroPython on ESP8266/32.It only accept GET requests.It adopts the programming style of  ESP8266WebServer library in ESP8266 Arduino Core.This make it suitable for serving REST API.The original code was inspired from the project [Controlling a GPIO through an ESP8266-based web server](https://lab.whitequark.org/notes/2016-10-20/controlling-a-gpio-through-an-esp8266-based-web-server/).
+This is a very lightweight web server for MicroPython on ESP8266/32.It only accept GET, POST and PUT requests.It adopts the programming style of  ESP8266WebServer library in ESP8266 Arduino Core.This make it suitable for serving REST API.The original code was inspired from the project [Controlling a GPIO through an ESP8266-based web server](https://lab.whitequark.org/notes/2016-10-20/controlling-a-gpio-through-an-esp8266-based-web-server/).
 
 ## Installation
 
@@ -36,7 +36,25 @@ Start the server at specified *port*.
 
 ### onPath(path, handler)
 
-Register *handler* for processing request with matching *path* 
+Legacy method to ensure compatibility. Calls `onGetPath(path, handler)`.
+
+### onGetPath(path, handler)
+
+Registers a handler for handling GET Requests.
+
+The Handlers expected Method Signature: `methodName(socket, args)`
+
+### onPostPath(path, handler)
+
+Registers a handler for handling POST Requests.
+
+The Handlers expected Method Signature: `methodName(socket, args, contenttype, content)`
+
+### onPutPath(path, handler)
+
+Registers a handler for handling PUT Requests.
+
+The Handlers expected Method signature: `methodName(socket, args, contenttype, content)`
 
 ### setDocPath(path)
 
@@ -46,6 +64,10 @@ Specified the directory in the filesystem containing all the HTML files.
 
 Specified the dictionary for template file. `dic` sould be a dictionary with all keys are string and contains all the names in replacing fields in all the template files.
 
+### setMaxContentLength(size)
+
+Defines the maximum Content Length of incoming request bodies (POST, PUT) in bytes. Default: 1024
+
 ### handleClient()
 
 Check for new request and call corresponding handler to process it.
@@ -53,6 +75,8 @@ Check for new request and call corresponding handler to process it.
 ## Examples
 
 You can upload www directory and index.p.html to "/" on ESP8266 board and run TestWebServer.py to see how it works.
+
+`main.py` contains an example for handling POST Requests. PUT Requests are acting the same way.
 
 TestWebServer.py will show its own IP address through serial monitor.Just open your browser and connect it to http://serverIP:8899 or http://serverIP:8899/index.p.html, you'll get the main page that can turn on/off the buildin led on ESP8266 board. The main page also demonstrate the template file usage. 
 
