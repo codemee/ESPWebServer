@@ -125,17 +125,17 @@ def __fileExist(path):
 def __serveFile(socket, path):
     """Serves a file from the filesystem
     """
-    filePath = path
+    filePath = docPath + path
     fileFound = True
     # find the file
     if not __fileExist(filePath):
         if not path.endswith("/"):
              fileFound = False
         else:
-            filePath = path + "index.html"
+            filePath = path + docPath + "/index.html"
             # find index.html in the path
             if not __fileExist(filePath):
-                filePath = path + "index.p.html"
+                filePath = path + docPath + "index.p.html"
                 # find index.p.html in the path
                 if not __fileExist(filePath): # no default html file found
                     fileFound = False
@@ -223,8 +223,6 @@ def handle(socket):
         getHandlers[path](socket, args)
     elif path in getHandlers: # here to ensure compatibility
         getHandlers[path](socket, args)
-    elif not path.startswith(docPath): # Check for wrong path
-        err(socket, "400", "Bad Request")
     else: # find file in the document path
         __serveFile(socket, path)
 
@@ -262,7 +260,10 @@ def setDocPath(path):
     """Set the path to documents' directory
     """
     global docPath
-    docPath = path
+    if path.endswith("/"):
+        docPath = path[:-1]
+    else:
+        docPath = path
 
 def setTplData(data):
     """Set data for template
