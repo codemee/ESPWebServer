@@ -135,7 +135,7 @@ def __serveFile(socket, path):
             filePath = path + docPath + "/index.html"
             # find index.html in the path
             if not __fileExist(filePath):
-                filePath = path + docPath + "index.p.html"
+                filePath = path + docPath + "/index.p.html"
                 # find index.p.html in the path
                 if not __fileExist(filePath): # no default html file found
                     fileFound = False
